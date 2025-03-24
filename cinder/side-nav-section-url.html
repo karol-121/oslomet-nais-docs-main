@@ -1,0 +1,24 @@
+{# This script prints url of the first page or link in given section/sections. #}
+
+{% if nav_item.children[0].is_section %}
+
+    {# 
+        if nav item is a section, look futher. 
+        (sections are the only nav items that does not have url) 
+    #}
+
+    {% set nav_item = nav_item.children[0] %}
+
+    {% include "side-nav-section-url.html" %}
+
+{% else %}
+
+    {# 
+        here url is printed, 
+        NOTE: other elements put in this file will corrupt the url, 
+        as they will be printed as part of the url. 
+    #}
+
+    {{ nav_item.children[0].url|url }}
+
+{% endif %}

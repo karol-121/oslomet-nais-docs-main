@@ -1,0 +1,85 @@
+<header class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
+    <nav class="container-fluid" aria-label="toolbar">
+        {# Main title & logo #}
+        {% if not config.theme.disable_nav_site_name %}
+
+            {% if config.theme.logo %}
+            <a class="navbar-brand" href="{{ nav.homepage.url|url }}">
+                <img alt="logo" height="36" src="{{ config.theme.logo|url }}" class="align-items-center"/>
+                {% if config.theme.site_title %} {{ config.theme.site_title }} {% else %} {{ config.site_name }} {% endif %}
+            </a>
+            {% else %}
+            <a class="navbar-brand" href="{{ nav.homepage.url|url }}">
+                {% if config.theme.site_title %} {{ config.theme.site_title }} {% else %} {{ config.site_name }} {% endif %}
+            </a>
+            {% endif %}
+
+        {% endif %}
+
+        {# Expander button #}
+        {% if nav|length>1 or (page and (page.next_page or page.previous_page)) or config.repo_url %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle toolbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        {% endif %}
+
+        {# Expanded toolbar #}
+        <div class="navbar-collapse collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav flex-grow-1 justify-content-end">
+                {% block search_button %}
+                    {% if 'search' in config['plugins'] and not config.theme.disable_nav_search %}
+                    <li class="nav-item d-grid m-1">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal" type="button">
+                            <span class="fas fa-search"></span> Search
+                        </button>
+                    </li> 
+                    {% endif %}
+                {% endblock %}
+
+                {% block next_prev %}
+                    {% if page and not config.theme.disable_nav_previous_next %}
+
+                    {# previous page link/button #}
+                    {% if page.previous_page %}
+                    <li class="nav-item d-grid m-1">
+                        <a href="{{ page.previous_page.url|url }}" rel="prev" role="button" class="btn btn-secondary">
+                            <span class="fas fa-arrow-left"></span> Previous page
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {# next page link/button #}
+                    {% if page.next_page %}
+                    <li class="nav-item d-grid m-1">
+                        <a href="{{ page.next_page.url|url }}" rel="next" role="button" class="btn btn-secondary">
+                            Next page <span class="fas fa-arrow-right"></span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% endif %}
+                {% endblock %}
+
+                {# Repo link #}
+                {% block repo %}
+                    {% if config.repo_url %}
+                        <li class="nav-item my-auto">
+                            <a href="{{ config.repo_url }}" class="btn nav-link">
+                                {% if 'github' in config.repo_url %}
+                                    <span class="fab fa-github"></span> {{ config.repo_name }}                                    
+                                {% elif 'bitbucket' in config.repo_url %}
+                                    <span class="fab fa-bitbucket"></span> {{ config.repo_name }}
+                                {% elif 'gitlab' in config.repo_url %}
+                                    <span class="fab fa-gitlab"></span> {{ config.repo_name }}
+                                {% else %}
+                                    {{ config.repo_name }}
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endblock %}
+            </ul>
+        </div>
+    </nav>
+</header>
